@@ -1,47 +1,25 @@
 const { request, response } = require('express');
 const express = require('express');
 const app = express();
+require('dotenv').config();
 //importing mongoose
 const mongoose = require('mongoose');
 //importing todoController
 const todoController = require('./controllers/todoController')
 
-app.get('/',(request,response)=>{
-    response.send('hello this is get response');
-});
+app.use(express.json());
 
-app.put('/',(request,response)=>{
-    response.send('hello this is a put response');
-});
+app.post('/todo',todoController.addTodo);
+app.get('/todo',todoController.getAllTodo);
+app.put('/todo/todoId',todoController.updateById);
+app.delete('/todo/:todoId',todoController.deleteById);
+app.get('/todo/:todoId',todoController.getTodoById);
 
-app.post('/',(request,response)=>{
-    response.send('hello this is a post response');
-});
-
-app.delete('/',(request,response)=>{
-    response.send('hello this is a push response');
-});
-
-
-app.get('/todos',(request,response)=>{
-    response.send([{
-        'title':'Jeffery is stuck',
-        'description':'I will do it demara',
-        'isCompleted': false
-    }]);
-});
-app.get('/users',(request,response)=>{
-    response.send([{
-        'username':'Jeffery Amoah',
-        'password':'creativity',
-        
-    }]);
-});
 //listening to request on localhost port 1489
-app.listen(1489,() => {
-    console.log("My server is Up and running on port 1489");
+app.listen(1479,() => {
+    console.log("My server is Up and running  ");
     //connecting to the database
-    mongoose.connect('mongodb+srv://Jesse:jesse1489@cluster0.w79m8.mongodb.net/todo_db?retryWrites=true&w=majority')
+    mongoose.connect(process.env.DB_URL)
     .then(function(){
         console.log("DataBase is Connected");
     })
